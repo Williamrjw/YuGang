@@ -1,41 +1,36 @@
 //=============================================================================
-//文件名称：main.h
-//功能概要：STM32F103C8核心检测
-//版权所有：源地工作室www.vcc-gnd.com
-//版权更新：2013-02-20
-//调试方式：J-Link OB ARM SW方式 5MHz
+//文件名称：main.c
+//功能概要：鱼缸检测与控制
+//版权所有：Williamrjw
+//调试方式：ST-Link
 //=============================================================================
 
 //头文件
+#include "def.h"
 #include "stm32f10x.h"
-#include "GPIOLIKE51.h"
 #include "stdio.h"
 
 //函数声明
 void GPIO_Configuration(void);
 
-//=============================================================================
-//文件名称：Delay
-//功能概要：延时
-//参数说明：nCount：延时长短
-//函数返回：无
-//=============================================================================
 
-void Delay(uint32_t nCount)
-{
-  for(; nCount != 0; nCount--);
-}
-
-
-//=============================================================================
-//文件名称：main
-//功能概要：主函数
-//参数说明：无
-//函数返回：int
-//=============================================================================
 int main(void)
 {
-	  GPIO_Configuration();
+		//初始化DATA变量
+		DATA tmp = {0,{0,0,0,0,0},0,7,'\0','\0'};
+		DATA *data = &tmp;
+		//初始化
+		sensorInit();
+		netInit();
+		watchDogInit();
+		GPIO_Configuration();
+		//while中的内容不断重复
+		while(TRUE){
+			getData(data);//获取数据
+			upLoad();//上传数据
+			sleep(SLEEP_TIME);//等待SLEEP_TIME时间后循环操作
+		}
+	  /*
     while (1)
 		{
 			if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0) != 0){
@@ -44,14 +39,10 @@ int main(void)
 				GPIO_ResetBits(GPIOC, GPIO_Pin_13);
 			}
     }
+		*/
 }
 
-//=============================================================================
-//文件名称：GPIO_Configuration
-//功能概要：GPIO初始化
-//参数说明：无
-//函数返回：无
-//=============================================================================
+
 void GPIO_Configuration(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;

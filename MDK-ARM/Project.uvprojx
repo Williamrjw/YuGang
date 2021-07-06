@@ -427,6 +427,11 @@
               <FileType>5</FileType>
               <FilePath>..\USER\stm32f10x_conf.h</FilePath>
             </File>
+            <File>
+              <FileName>def.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\def.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
