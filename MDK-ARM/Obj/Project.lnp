@@ -2,6 +2,7 @@
 ".\obj\main.o"
 ".\obj\stm32f10x_it.o"
 ".\obj\def.o"
+".\obj\temp.o"
 ".\obj\misc.o"
 ".\obj\stm32f10x_flash.o"
 ".\obj\stm32f10x_gpio.o"

@@ -9,26 +9,51 @@
 #include "def.h"
 #include "stm32f10x.h"
 #include "stdio.h"
+#include "temp.h"
 
 //函数声明
-void GPIO_Configuration(void);
 
+VOID test(){
+	printf("hello!");
+}
 
 int main(void)
 {
 		//初始化DATA变量
-		DATA tmp = {0,{0,0,0,0,0},0,7,'\0','\0'};
+		DATA tmp = {0,{0},0,7,'\0'};
+		STATUS st_tmp = '\0';
 		DATA *data = &tmp;
+		STATUS *status = &st_tmp;
 		//初始化
-		sensorInit();
-		netInit();
+		sensorInit(status);
+		netInit(status);
 		watchDogInit();
-		GPIO_Configuration();
 		//while中的内容不断重复
 		while(TRUE){
-			getData(data);//获取数据
-			upLoad();//上传数据
-			sleep(SLEEP_TIME);//等待SLEEP_TIME时间后循环操作
+//			getData(status,data);//获取数据
+//			upLoad(status);//上传数据
+//			sleep(SLEEP_TIME);//等待SLEEP_TIME时间后循环操作
+//			if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0)){
+//				DSin();
+//				if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_1)){
+//					GPIO_SetBits(GPIOA, GPIO_Pin_1);
+//				}
+//				else{
+//					GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+//				}
+//			}
+//			else{
+//				DSout();
+//				if(GPIO_ReadOutputDataBit(GPIOB,GPIO_Pin_1)){
+//					GPIO_SetBits(GPIOA, GPIO_Pin_1);
+//				}
+//				else{
+//					GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+//				}
+//			}
+//			
+			data->temp[0] = getTemp(status, 0);
+
 		}
 	  /*
     while (1)
@@ -43,26 +68,7 @@ int main(void)
 }
 
 
-void GPIO_Configuration(void)
-{
-  GPIO_InitTypeDef GPIO_InitStructure;
-//=============================================================================
-//初始化最小系统板上PC13LED
-//=============================================================================		
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOC , ENABLE); 		
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-//=============================================================================
-//初始化输入PA0（作为感应器的OUT接口输入）
-//=============================================================================	
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA , ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD; 
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
-}
+
 
 
 
