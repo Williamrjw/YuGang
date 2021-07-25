@@ -14,7 +14,8 @@
 #define CHAR char
 #define BYTE unsigned char
 #define BIT unsigned char
-#define TEMP_DATA short
+#define TWO_BYTE_SIGNED_DATA short
+#define TWO_BYTE_UNSIGNED_DATA unsigned short
 
 /*******定义常量*******/
 #define TEMP_SENSOR_NUMS 2

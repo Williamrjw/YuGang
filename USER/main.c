@@ -52,7 +52,7 @@ int main(void)
 //				}
 //			}
 //			
-			data->temp[0] = getTemp(status, 0);
+			data->light = getLight(status);
 
 		}
 	  /*
