@@ -11,3 +11,7 @@
 .\obj\def.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h
 .\obj\def.o: ..\Libraries\STM32F10x_StdPeriph_Driver\inc\misc.h
 .\obj\def.o: ..\USER\i2c.h
+.\obj\def.o: ..\USER\adc.h
+.\obj\def.o: ..\USER\esp01.h
+.\obj\def.o: ..\USER\watchdog.h
+.\obj\def.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

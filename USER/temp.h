@@ -11,7 +11,7 @@
 #define DSout() {GPIOB->CRL&=0XFFFFFF0F;GPIOB->CRL|=0x3<<4;}
 
 VOID tempInit(VOID);
-STATUS tempCheck(VOID);
+VOID tempCheck(STATUS* status);
 VOID tempWriteByte(BYTE dat);
 BIT tempReadBit(VOID);
 BYTE tempReadByte(VOID);

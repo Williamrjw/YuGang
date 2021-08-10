@@ -13,7 +13,7 @@ VOID tempInit(VOID){//send reset and initialization command
   sleep(15);
 }
 
-STATUS tempCheck(VOID) 	   
+VOID tempCheck(STATUS* status) 	   
 {   
 	BYTE retry=0; 
     while (isDS()&&retry<200)
@@ -21,16 +21,19 @@ STATUS tempCheck(VOID)
 		retry++;
 		sleep(1);
 	};	 
-	if(retry>=200)
-		return 1;//两百次了还没拉低就是没接上
+	if(retry>=200){
+		*status = SENSOR_TEMP_ERROR;//两百次了还没拉低就是没接上
+		return;
+	}
 	retry = 0;
 	while (!isDS()&&retry<240)
 	{
 		retry++;
 		sleep(1);
 	}
-	if(retry >=240) return 1;
-	return 0;//初始化成功
+	if(retry >=240) 
+		*status = SENSOR_TEMP_ERROR;
+	return;
 }
 
 VOID tempWriteByte(BYTE dat)   //write a byte to ds18b20

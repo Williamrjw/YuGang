@@ -7,53 +7,33 @@
 
 //头文件
 #include "def.h"
+#include "esp01.h"
+#include "watchdog.h"
 #include "stm32f10x.h"
-#include "stdio.h"
-#include "temp.h"
 
-//函数声明
 
-VOID test(){
-	printf("hello!");
-}
-
+//声明
+//初始化DATA变量
+DATA tmp = {0,{0},0,7,'\0'};
+STATUS st_tmp = '\0';
+DATA *data = &tmp;
+STATUS *status = &st_tmp;
 int main(void)
 {
-		//初始化DATA变量
-		DATA tmp = {0,{0},0,7,'\0'};
-		STATUS st_tmp = '\0';
-		DATA *data = &tmp;
-		STATUS *status = &st_tmp;
 		//初始化
 		sensorInit(status);
+		GPIO_SetBits(GPIOC, GPIO_Pin_13);//灭灯
+		//watchDogInit();
 		netInit(status);
-		watchDogInit();
 		//while中的内容不断重复
 		while(TRUE){
-//			getData(status,data);//获取数据
-//			upLoad(status);//上传数据
-//			sleep(SLEEP_TIME);//等待SLEEP_TIME时间后循环操作
-//			if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0)){
-//				DSin();
-//				if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_1)){
-//					GPIO_SetBits(GPIOA, GPIO_Pin_1);
-//				}
-//				else{
-//					GPIO_ResetBits(GPIOA, GPIO_Pin_1);
-//				}
-//			}
-//			else{
-//				DSout();
-//				if(GPIO_ReadOutputDataBit(GPIOB,GPIO_Pin_1)){
-//					GPIO_SetBits(GPIOA, GPIO_Pin_1);
-//				}
-//				else{
-//					GPIO_ResetBits(GPIOA, GPIO_Pin_1);
-//				}
-//			}
-//			
-			data->light = getLight(status);
 
+			if( NONE_ERROR != *status ){
+				GPIO_ResetBits(GPIOC, GPIO_Pin_13);//亮灯
+			}
+			getData(status,data);
+			upLoad(status,data);
+			*status = NONE_ERROR;
 		}
 	  /*
     while (1)

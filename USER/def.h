@@ -8,7 +8,8 @@
 #define FLOW char
 #define STATUS unsigned char
 #define VOID void
-#define TIME long
+#define TIME unsigned long int
+#define DELAY_TIME int
 #define INT int
 #define UINT unsigned int
 #define CHAR char
@@ -19,7 +20,6 @@
 
 /*******定义常量*******/
 #define TEMP_SENSOR_NUMS 2
-#define SLEEP_TIME 5000
 #define TRUE 1
 #define FALSE 0 
 
@@ -28,13 +28,22 @@
 
 /********状态码********/
 STATUS_CODE{
-  NONE_ERROR = 0,
-  NETWORK_ERROR = 1,
-  SENSOR_TEMP_ERROR = 2,
-  SENSOR_LIGHT_ERROR = 3,
-  SENSOR_PH_ERROR = 4,
-  SENSOR_FLOW_ERROR = 5,
-  OTHER = 6,
+	//无错误
+  NONE_ERROR = 0x00,
+	//传感器错误
+  SENSOR_TEMP_ERROR = 0x01,
+  SENSOR_LIGHT_ERROR = 0x02,
+  SENSOR_PH_ERROR = 0x03,
+  SENSOR_FLOW_ERROR = 0x04,
+	//串口（网络)连接错误
+	NETWORK_CONNECT_ERROR = 0x10,
+	NETWORK_BUSY_ERROR = 0x11,
+	//服务器连接错误
+	SERVER_CONNECT_ERROR = 0x20,
+	SERVER_BUSY_ERROR = 0x21,
+	SERVER_TIME_ERROR = 0x22,
+	//其他错误
+	OTHER_ERROR = 0xFF,
 };
 
 /******结构体变量******/
@@ -44,11 +53,14 @@ DATA{
 	LIGHT light; 			//光照度
 	PH ph;				//pH值
 	FLOW flow;			//水流状态
+	STATUS *status; //状态
 };
 
 /*****函数声明*****/
-//不包括中断处理函数
+//初始化GPIO
 VOID GPIO_Configuration(VOID);
+//初始化中断
+VOID NVIC_Configuration(VOID);
 /****传感器部分****/
 //初始化传感器
 VOID sensorInit(STATUS *status);
@@ -65,7 +77,7 @@ VOID getData(STATUS *status,DATA *data);
 
 /*****网络部分*****/
 //上传数据 返回值：成功与否 bool类型 True/False
-VOID upLoad(STATUS *status);
+VOID upLoad(STATUS *status,DATA* data);
 //初始化网络
 VOID netInit(STATUS *status);
 
